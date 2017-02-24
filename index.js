@@ -16,6 +16,43 @@ const baseConfig = () => ({
 const merge = (...mergees) => a => webpackMerge(a, ...mergees.filter(x => x))
 const dumbMerge = b => a => Object.assign({}, a, b)
 
+/**
+ * Combine multiple webpack parts into a webpack config. A part is either an
+ * object, which will be merged in to the config, or it is a function that takes
+ * the config as it is and is expected to return a new version of the config.
+ * The parts are resolved in the order they are provided. There is a small base
+ * config that combine starts with that looks like this:
+ *
+ * ```js
+ * {
+ *   output: {
+ *     filename: '[name].[chunkhash].js',
+ *     chunkFilename: '[name].[chunkhash].js',
+ *     publicPath: '/'
+ *   }
+ * }
+ * ```
+ *
+ * @function combine
+ * @param {Array<Object|Function>} parts Array of webpack config objects or functions
+ * @returns {Object} Combined Webpack config object
+ * @example
+ * // webpack.config.js
+ * const parts = require('webpack-parts')
+ *
+ * module.exports = parts.combine(
+ *   {
+ *     entry: "app/index.js",
+ *     output: {
+ *       path: "build"
+ *     }
+ *   },
+ *   parts.js(),
+ *   parts.css(),
+ *   parts.dev.sourceMaps(),
+ *   parts.optimize.minimize()
+ * )
+ */
 const combine = parts =>
   parts
     .filter(x => x)
@@ -27,7 +64,7 @@ const combine = parts =>
 
 const flow = (...fs) => x => fs.filter(x => x).reduce((acc, f) => f(acc), x)
 
-const inlineCss = ({ include, postcssConfig }) => ({
+const inlineCss = ({ include, postcssOptions }) => ({
   module: {
     rules: [
       {
@@ -44,7 +81,7 @@ const inlineCss = ({ include, postcssConfig }) => ({
           {
             loader: 'postcss-loader',
             options: {
-              plugins: postcssConfig,
+              plugins: postcssOptions,
             },
           },
         ],
@@ -53,10 +90,21 @@ const inlineCss = ({ include, postcssConfig }) => ({
   },
 })
 
-const css = ({ include, postcssConfig, extractFilename }) => ifProd(
+/**
+ * Use postcss to process css.
+ *
+ * @function css
+ * @param {string|Array} [$0.include] [Webpack include
+ * conditions](https://webpack.js.org/configuration/module/#condition)
+ * @param {Object} [$0.postcssOptions] [postcss-loader
+ * options](https://github.com/postcss/postcss-loader#options)
+ * @param {string} [$0.extractFilename] Path to extract css to using
+ * `extract-text-webpack-plugin` when `NODE_ENV=production`
+ */
+const css = ({ include, postcssOptions, extractFilename } = {}) => ifProd(
   config => {
     if (!extractFilename)
-      return merge(inlineCss({ include, postcssConfig }))(config)
+      return merge(inlineCss({ include, postcssOptions }))(config)
 
     const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin')
     const extractPlugin = new ExtractTextWebpackPlugin(extractFilename)
@@ -78,9 +126,7 @@ const css = ({ include, postcssConfig, extractFilename }) => ifProd(
                 },
                 {
                   loader: 'postcss-loader',
-                  options: {
-                    plugins: postcssConfig,
-                  },
+                  options: postcssOptions,
                 },
               ],
             }),
@@ -90,9 +136,18 @@ const css = ({ include, postcssConfig, extractFilename }) => ifProd(
       plugins: [extractPlugin],
     })(config)
   },
-  inlineCss({ include, postcssConfig })
+  inlineCss({ include, postcssOptions })
 )
 
+/**
+ * Use babel to process js.
+ *
+ * @function js
+ * @param {string|Array} [$0.include] [Webpack include
+ * conditions](https://webpack.js.org/configuration/module/#condition)
+ * @param {string} [$0.basePath] The base path to which js files will be emitted.
+ *        It's essentially a prefix to `fileName` and `chunkFilename`
+ */
 const js = ({ include, basePath = '' }) => ({
   output: {
     filename: `${basePath}[name]${ifProd('.[chunkhash]', '')}.js`,
@@ -120,6 +175,16 @@ const js = ({ include, basePath = '' }) => ({
   },
 })
 
+/**
+ * Include images via urls.
+ *
+ * @function images
+ * @param {string|Array} [$0.include] [Webpack include
+ * conditions](https://webpack.js.org/configuration/module/#condition)
+ * @param {Object} [$0.imageOptions] Options to pass to `image-webpack-loader`
+ * @param {string} [$0.basePath] The base path to which images files will be
+ *        emitted.
+ */
 const images = ({ include, imageOptions, basePath = '' } = {}) => ({
   module: {
     rules: [
