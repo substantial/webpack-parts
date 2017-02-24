@@ -3,30 +3,29 @@ const webpackMerge = require('webpack-merge')
 const { mapValues } = require('lodash')
 
 const ifProd = (prod, notProd) =>
-      (process.env.NODE_ENV === 'production' ? prod : notProd)
+  process.env.NODE_ENV === 'production' ? prod : notProd
 
 const baseConfig = () => ({
   output: {
     filename: `[name]${ifProd('.[chunkhash]', '')}.js`,
     chunkFilename: `[name]${ifProd('.[chunkhash]', '')}.js`,
-    publicPath: '/'
-  }
+    publicPath: '/',
+  },
 })
 
 const merge = (...mergees) => a => webpackMerge(a, ...mergees.filter(x => x))
 const dumbMerge = b => a => Object.assign({}, a, b)
 
-const combine = (parts) =>
-      parts
-      .filter(x => x)
-      .reduce(
-        (config, part) =>
-          (typeof part === "function" ? part(config) : webpackMerge(config, part)),
-        baseConfig()
-      )
+const combine = parts =>
+  parts
+    .filter(x => x)
+    .reduce(
+      (config, part) =>
+        typeof part === 'function' ? part(config) : webpackMerge(config, part),
+      baseConfig()
+    )
 
-const flow = (...fs) =>
-      x => fs.filter(x => x).reduce((acc, f) => f(acc), x)
+const flow = (...fs) => x => fs.filter(x => x).reduce((acc, f) => f(acc), x)
 
 const inlineCss = ({ include, postcssConfig }) => ({
   module: {
@@ -39,27 +38,28 @@ const inlineCss = ({ include, postcssConfig }) => ({
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 1
-            }
+              importLoaders: 1,
+            },
           },
           {
             loader: 'postcss-loader',
             options: {
-              plugins: postcssConfig
-            }
-          }
-        ]
-      }
-    ]
-  }
+              plugins: postcssConfig,
+            },
+          },
+        ],
+      },
+    ],
+  },
 })
 
 const css = ({ include, postcssConfig, extractFilename }) => ifProd(
   config => {
-    if (!extractFilename) return merge(inlineCss({ include, postcssConfig }))(config)
+    if (!extractFilename)
+      return merge(inlineCss({ include, postcssConfig }))(config)
 
     const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin')
-    const extractPlugin = new ExtractTextWebpackPlugin(extractFilename);
+    const extractPlugin = new ExtractTextWebpackPlugin(extractFilename)
 
     return merge({
       module: {
@@ -73,21 +73,21 @@ const css = ({ include, postcssConfig, extractFilename }) => ifProd(
                 {
                   loader: 'css-loader',
                   options: {
-                    importLoaders: 1
-                  }
+                    importLoaders: 1,
+                  },
                 },
                 {
                   loader: 'postcss-loader',
                   options: {
-                    plugins: postcssConfig
-                  }
-                }
-              ]
-            })
-          }
-        ]
+                    plugins: postcssConfig,
+                  },
+                },
+              ],
+            }),
+          },
+        ],
       },
-      plugins: [extractPlugin]
+      plugins: [extractPlugin],
     })(config)
   },
   inlineCss({ include, postcssConfig })
@@ -97,25 +97,27 @@ const js = ({ include, basePath = '' }) => ({
   output: {
     filename: `${basePath}[name]${ifProd('.[chunkhash]', '')}.js`,
     chunkFilename: `${basePath}[name]${ifProd('.[chunkhash]', '')}.js`,
-    publicPath: '/'
+    publicPath: '/',
   },
   module: {
     rules: [
       {
         include,
         test: /\.jsx?$/,
-        use: [{
-          loader: 'babel-loader',
-          options: {
-            cacheDirectory: true
-          }
-        }]
-      }
-    ]
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: true,
+            },
+          },
+        ],
+      },
+    ],
   },
   resolve: {
-    extensions: ['.js', '.jsx']
-  }
+    extensions: ['.js', '.jsx'],
+  },
 })
 
 const images = ({ include, imageOptions, basePath = '' } = {}) => ({
@@ -130,33 +132,35 @@ const images = ({ include, imageOptions, basePath = '' } = {}) => ({
               loader: 'file-loader',
               options: {
                 name: `${basePath}[name].[hash:8].[ext]`,
-              }
+              },
             },
             {
               loader: 'image-webpack-loader',
-              options: imageOptions
-            }
+              options: imageOptions,
+            },
           ],
           [
             {
               loader: 'file-loader',
               options: {
                 name: `${basePath}[name].[ext]`,
-              }
-            }
+              },
+            },
           ]
-        )
-      }
-    ]
-  }
+        ),
+      },
+    ],
+  },
 })
 
-const inlineImages = ({
-  basePath = '',
-  imageOptions,
-  include,
-  limit = 10000
-} = {}) => ({
+const inlineImages = (
+  {
+    basePath = '',
+    imageOptions,
+    include,
+    limit = 10000,
+  } = {}
+) => ({
   module: {
     rules: [
       {
@@ -169,23 +173,23 @@ const inlineImages = ({
               options: {
                 limit,
                 name: `${basePath}[name].[hash:8].[ext]`,
-              }
+              },
             },
             {
               loader: 'image-webpack-loader',
-              options: imageOptions
-            }
+              options: imageOptions,
+            },
           ],
           {
             loader: 'file-loader',
             options: {
-              name: `${basePath}[name].[ext]`
-            }
+              name: `${basePath}[name].[ext]`,
+            },
           }
-        )
-      }
-    ]
-  }
+        ),
+      },
+    ],
+  },
 })
 
 // Do not include any of moment's locales. If we don't do this, they are all
@@ -193,19 +197,19 @@ const inlineImages = ({
 // to support other locales
 const removeMomentLocales = () => ({
   plugins: [
-    new webpack.ContextReplacementPlugin(/moment[\\/]locale$/, /^no-locales$/)
-  ]
+    new webpack.ContextReplacementPlugin(/moment[\\/]locale$/, /^no-locales$/),
+  ],
 })
 
 // Force to a single version of lodash across all dependencies. Lodash is big
 // and we don't want to include it or its bits more than once
-const forceSingleLodash = (lodashPath) => ({
+const forceSingleLodash = lodashPath => ({
   resolve: {
     alias: {
       lodash: lodashPath,
-      'lodash-es': lodashPath
-    }
-  }
+      'lodash-es': lodashPath,
+    },
+  },
 })
 
 const vendorNodeModules = ({ name = 'vendor', chunks }) => ({
@@ -215,23 +219,21 @@ const vendorNodeModules = ({ name = 'vendor', chunks }) => ({
         return module.context && module.context.indexOf('node_modules') !== -1
       },
       names: [name],
-      chunks
+      chunks,
     }),
-  ]
+  ],
 })
 
-const copyEnv = (vars) => ({
-  plugins: [
-    new webpack.EnvironmentPlugin(vars)
-  ]
+const copyEnv = vars => ({
+  plugins: [new webpack.EnvironmentPlugin(vars)],
 })
 
-const setEnv = (env) => ({
+const setEnv = env => ({
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': mapValues(env, value => JSON.stringify(value))
-    })
-  ]
+      'process.env': mapValues(env, value => JSON.stringify(value)),
+    }),
+  ],
 })
 
 const prependToEntry = (entry, file) => {
@@ -241,14 +243,15 @@ const prependToEntry = (entry, file) => {
   return mapValues(entry, subEntry => prependToEntry(subEntry, file))
 }
 
-const prependToEachEntry = file => config =>
-      dumbMerge({
-        entry: prependToEntry(config.entry, file)
-      })(config)
+const prependToEachEntry = file => config => dumbMerge({
+  entry: prependToEntry(config.entry, file),
+})(config)
 
 const failIfNotConfigured = (field, name) => config => {
   if (!config[field]) {
-    throw new Error(`Please ensure that "${field}" is set before using ${name}`)
+    throw new Error(
+      `Please ensure that "${field}" is set before using ${name}`
+    )
   }
   return config
 }
@@ -261,25 +264,28 @@ const reactHotLoader = () => ifProd(
     merge({
       plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoEmitOnErrorsPlugin()
-      ]
+        new webpack.NoEmitOnErrorsPlugin(),
+      ],
     })
   )
 )
 
 const analyze = () => ({
   plugins: [
-    new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)({ analyzerMode: 'static' })
-  ]
+    new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)({
+      analyzerMode: 'static',
+    }),
+  ],
 })
 
-const webpackHotMiddleware = () => ifProd(
-  null,
-  flow(
-    failIfNotConfigured('entry', 'webpackHotMiddleware'),
-    prependToEachEntry('webpack-hot-middleware/client')
+const webpackHotMiddleware = () =>
+  ifProd(
+    null,
+    flow(
+      failIfNotConfigured('entry', 'webpackHotMiddleware'),
+      prependToEachEntry('webpack-hot-middleware/client')
+    )
   )
-)
 
 const minimize = () => ifProd({
   plugins: [
@@ -300,19 +306,19 @@ const minimize = () => ifProd({
         screw_ie8: true,
       },
       sourceMap: true,
-    })
-  ]
+    }),
+  ],
 })
 
-const sourceMaps = ({
-  development = 'cheap-module-source-map',
-  production = 'source-map'
-} = {}) => ({ devtool: ifProd(production, development) })
+const sourceMaps = (
+  {
+    development = 'cheap-module-source-map',
+    production = 'source-map',
+  } = {}
+) => ({ devtool: ifProd(production, development) })
 
 const progressBar = () => ({
-  plugins: [
-    new (require('progress-bar-webpack-plugin'))()
-  ]
+  plugins: [new (require('progress-bar-webpack-plugin'))()],
 })
 
 module.exports = {
@@ -328,18 +334,18 @@ module.exports = {
   dev: {
     reactHotLoader,
     sourceMaps,
-    webpackHotMiddleware
+    webpackHotMiddleware,
   },
   optimize: {
     forceSingleLodash,
     minimize,
-    removeMomentLocales
+    removeMomentLocales,
   },
   ui: {
-    progressBar
+    progressBar,
   },
   util: {
     ifProd,
-    merge
-  }
+    merge,
+  },
 }

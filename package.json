@@ -7,16 +7,22 @@
   "author": "Aaron Jensen",
   "license": "MIT",
   "engines": {
-    "node": ">= 6.0.0"
+    "node": ">= 6.4.0"
+  },
+  "scripts": {
+    "format": "prettier --single-quote --trailing-comma es5 --write \"*.js\" && eslint --fix .",
+    "lint": "eslint ."
   },
   "dependencies": {
-    "lodash": "^4.0.0",
-    "webpack-merge": "^3.0.0",
     "extract-text-webpack-plugin": "beta",
+    "lodash": "^4.0.0",
     "progress-bar-webpack-plugin": "^1.9.3",
     "webpack": "^2.2.1",
-    "webpack-bundle-analyzer": "^2.3.0"
+    "webpack-bundle-analyzer": "^2.3.0",
+    "webpack-merge": "^3.0.0"
   },
   "devDependencies": {
+    "eslint": "^3.16.1",
+    "prettier": "^0.19.0"
   }
 }
