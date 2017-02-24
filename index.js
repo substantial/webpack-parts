@@ -15,6 +15,8 @@ const baseConfig = () => ({
 
 const merge = (...mergees) => a => webpackMerge(a, ...mergees.filter(x => x))
 const dumbMerge = b => a => Object.assign({}, a, b)
+const flatten = arr =>
+  arr.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [])
 
 /**
  * Combine multiple webpack parts into a webpack config. A part is either an
@@ -53,8 +55,8 @@ const dumbMerge = b => a => Object.assign({}, a, b)
  *   parts.optimize.minimize()
  * )
  */
-const combine = parts =>
-  parts
+const combine = (...parts) =>
+  flatten(parts)
     .filter(x => x)
     .reduce(
       (config, part) =>
@@ -62,7 +64,8 @@ const combine = parts =>
       baseConfig()
     )
 
-const flow = (...fs) => x => fs.filter(x => x).reduce((acc, f) => f(acc), x)
+const flow = (...fs) =>
+  x => flatten(fs).filter(x => x).reduce((acc, f) => f(acc), x)
 
 const inlineCss = ({ include, postcssOptions }) => ({
   module: {
