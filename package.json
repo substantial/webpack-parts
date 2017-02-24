@@ -13,6 +13,9 @@
     "format": "prettier --single-quote --trailing-comma es5 --write \"*.js\" && eslint --fix .",
     "lint": "eslint ."
   },
+  "files": [
+    "index.js"
+  ],
   "dependencies": {
     "extract-text-webpack-plugin": "beta",
     "lodash": "^4.0.0",
