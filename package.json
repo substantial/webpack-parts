@@ -10,6 +10,8 @@
     "node": ">= 6.4.0"
   },
   "scripts": {
+    "documentation:watch": "yarn documentation:build -- -w",
+    "documentation:build": "documentation build index.js --github -f html -o docs",
     "format": "prettier --single-quote --trailing-comma es5 --write \"*.js\" && eslint --fix .",
     "lint": "eslint ."
   },
