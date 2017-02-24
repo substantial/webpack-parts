@@ -47,8 +47,8 @@ const dumbMerge = b => a => Object.assign({}, a, b)
  *       path: "build"
  *     }
  *   },
- *   parts.js(),
- *   parts.css(),
+ *   parts.load.js(),
+ *   parts.load.css(),
  *   parts.dev.sourceMaps(),
  *   parts.optimize.minimize()
  * )
@@ -93,7 +93,7 @@ const inlineCss = ({ include, postcssOptions }) => ({
 /**
  * Use postcss to process css.
  *
- * @function css
+ * @function load.css
  * @param {string|Array} [$0.include] [Webpack include
  * conditions](https://webpack.js.org/configuration/module/#condition)
  * @param {Object} [$0.postcssOptions] [postcss-loader
@@ -143,7 +143,7 @@ const css = ({ include, postcssOptions, extractFilename } = {}) => ifProd(
 /**
  * Use babel to process js.
  *
- * @function js
+ * @function load.js
  * @param {string|Array} [$0.include] [Webpack include
  * conditions](https://webpack.js.org/configuration/module/#condition)
  * @param {string} [$0.basePath] The base path to which js files will be
@@ -180,7 +180,7 @@ const js = ({ include, basePath = '' } = {}) => ({
 /**
  * Include images via urls.
  *
- * @function images
+ * @function load.images
  * @param {string|Array} [$0.include] [Webpack include
  * conditions](https://webpack.js.org/configuration/module/#condition)
  * @param {Object} [$0.imageOptions] Options to pass to `image-webpack-loader`
@@ -234,44 +234,11 @@ const images = (
 })
 
 /**
- * Do not include any of moment's locales. If we don't do this, they are all
- * included and add 23kb min+gzip. You probably shouldn't use this if you need
- * to support other locales.
- *
- * @function optimize.removeMomentLocales
- */
-const removeMomentLocales = () => ({
-  plugins: [
-    new webpack.ContextReplacementPlugin(/moment[\\/]locale$/, /^no-locales$/),
-  ],
-})
-
-/**
- * Force to a single version of lodash across all dependencies. Lodash is big
- * and we don't want to include it or its bits more than once. This is probably
- * safe as long as there are no mixed major versions and the most recent version
- * of lodash is the one forced.
- *
- * @function optimize.forceSingleLodash
- * @param {string} lodashPath Absolute path to lodash module
- * @example
- * parts.optimize.forceSingleLodash(require.resolve('lodash'))
- */
-const forceSingleLodash = lodashPath => ({
-  resolve: {
-    alias: {
-      lodash: lodashPath,
-      'lodash-es': lodashPath,
-    },
-  },
-})
-
-/**
  * Extract all used dependencies from `node_modules` into a separate `vendor.js`.
  * By default, it will consider all dependencies used by all entry points, but
  * you override this by specifying `$0.chunks`.
  *
- * @function vendorNodeModules
+ * @function output.vendorNodeModules
  * @param {string} [$0.name] Name of vendor chunk
  * @param {Array<string>} [$0.chunks] Array of entry chunk names to consider
  *                                    when looking for used `node_modules`.
@@ -295,7 +262,7 @@ const vendorNodeModules = ({ name = 'vendor', chunks }) => ({
  * the current environment, use `setEnv`. Makes use of
  * `webpack.EnvironmentPlugin`.
  *
- * @function copyEnv
+ * @function setup.copyEnv
  * @param {Array<string>} vars The names of environment variables to make available.
  */
 const copyEnv = vars => ({
@@ -308,7 +275,7 @@ const copyEnv = vars => ({
  * `JSON.stringify` the values, that will be done for you. Makes use of
  * `webpack.DefinePlugin`
  *
- * @function setEnv
+ * @function setup.setEnv
  * @param {Object} env An object whose keys are the names of environment
  *                     variables and whose values are the values to set. These
  *                     should be plain JSON objects.
@@ -340,6 +307,20 @@ const failIfNotConfigured = (field, name) => config => {
   }
   return config
 }
+
+/**
+ * Use `webpack-bundle-analyzer` to analyze bundle size. Opens a web browser
+ * with a visual graph of bundled modules and their sizes
+ *
+ * @function dev.analyze
+ */
+const analyze = () => ({
+  plugins: [
+    new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)({
+      analyzerMode: 'static',
+    }),
+  ],
+})
 
 /**
  * Enable hot module reloading when `NODE_ENV !== 'production'`
@@ -383,17 +364,39 @@ const hotModuleReloading = (
 )
 
 /**
- * Use `webpack-bundle-analyzer` to analyze bundle size. Opens a web browser
- * with a visual graph of bundled modules and their sizes
+ * Enable source maps. Uses different options depending on NODE_ENV.
  *
- * @function dev.analyze
+ * @function dev.sourceMaps
+ * @param {string} $0.development devtool to use in development. Defaults to
+ *                                `cheap-module-source-map`
+ * @param {string} $0.production devtool to use in production. Defaults to
+ *                               `source-map`
  */
-const analyze = () => ({
-  plugins: [
-    new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)({
-      analyzerMode: 'static',
-    }),
-  ],
+const sourceMaps = (
+  {
+    development = 'cheap-module-source-map',
+    production = 'source-map',
+  } = {}
+) => ({ devtool: ifProd(production, development) })
+
+/**
+ * Force to a single version of lodash across all dependencies. Lodash is big
+ * and we don't want to include it or its bits more than once. This is probably
+ * safe as long as there are no mixed major versions and the most recent version
+ * of lodash is the one forced.
+ *
+ * @function optimize.forceSingleLodash
+ * @param {string} lodashPath Absolute path to lodash module
+ * @example
+ * parts.optimize.forceSingleLodash(require.resolve('lodash'))
+ */
+const forceSingleLodash = lodashPath => ({
+  resolve: {
+    alias: {
+      lodash: lodashPath,
+      'lodash-es': lodashPath,
+    },
+  },
 })
 
 /**
@@ -426,20 +429,17 @@ const minimize = () => ifProd({
 })
 
 /**
- * Enable source maps. Uses different options depending on NODE_ENV.
+ * Do not include any of moment's locales. If we don't do this, they are all
+ * included and add 23kb min+gzip. You probably shouldn't use this if you need
+ * to support other locales.
  *
- * @function dev.sourceMaps
- * @param {string} $0.development devtool to use in development. Defaults to
- *                                `cheap-module-source-map`
- * @param {string} $0.production devtool to use in production. Defaults to
- *                               `source-map`
+ * @function optimize.removeMomentLocales
  */
-const sourceMaps = (
-  {
-    development = 'cheap-module-source-map',
-    production = 'source-map',
-  } = {}
-) => ({ devtool: ifProd(production, development) })
+const removeMomentLocales = () => ({
+  plugins: [
+    new webpack.ContextReplacementPlugin(/moment[\\/]locale$/, /^no-locales$/),
+  ],
+})
 
 /**
  * Enable progress bar when building at the command line.
@@ -452,27 +452,32 @@ const progressBar = () => ({
 
 module.exports = {
   combine,
-  copyEnv,
-  css,
-  images,
-  js,
-  setEnv,
-  vendorNodeModules,
+  ifProd,
+  flow,
+  merge,
   dev: {
     hotModuleReloading,
     sourceMaps,
     analyze,
+  },
+  load: {
+    css,
+    images,
+    js,
   },
   optimize: {
     forceSingleLodash,
     minimize,
     removeMomentLocales,
   },
+  output: {
+    vendorNodeModules,
+  },
+  setup: {
+    copyEnv,
+    setEnv,
+  },
   ui: {
     progressBar,
-  },
-  util: {
-    ifProd,
-    merge,
   },
 }
