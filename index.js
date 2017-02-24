@@ -230,17 +230,30 @@ const images = (
   },
 })
 
-// Do not include any of moment's locales. If we don't do this, they are all
-// included and add 23kb min+gzip. You probably shouldn't use this if you need
-// to support other locales
+/**
+ * Do not include any of moment's locales. If we don't do this, they are all
+ * included and add 23kb min+gzip. You probably shouldn't use this if you need
+ * to support other locales.
+ *
+ * @function optimize.removeMomentLocales
+ */
 const removeMomentLocales = () => ({
   plugins: [
     new webpack.ContextReplacementPlugin(/moment[\\/]locale$/, /^no-locales$/),
   ],
 })
 
-// Force to a single version of lodash across all dependencies. Lodash is big
-// and we don't want to include it or its bits more than once
+/**
+ * Force to a single version of lodash across all dependencies. Lodash is big
+ * and we don't want to include it or its bits more than once. This is probably
+ * safe as long as there are no mixed major versions and the most recent version
+ * of lodash is the one forced.
+ *
+ * @function optimize.forceSingleLodash
+ * @param {string} lodashPath Absolute path to lodash module
+ * @example
+ * parts.optimize.forceSingleLodash(require.resolve('lodash'))
+ */
 const forceSingleLodash = lodashPath => ({
   resolve: {
     alias: {
@@ -250,6 +263,16 @@ const forceSingleLodash = lodashPath => ({
   },
 })
 
+/**
+ * Extract all used dependencies from `node_modules` into a separate `vendor.js`.
+ * By default, it will consider all dependencies used by all entry points, but
+ * you override this by specifying `$0.chunks`.
+ *
+ * @function vendorNodeModules
+ * @param {string} [$0.name] Name of vendor chunk
+ * @param {Array<string>} [$0.chunks] Array of entry chunk names to consider
+ *         when looking for used `node_modules`.
+ */
 const vendorNodeModules = ({ name = 'vendor', chunks }) => ({
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
@@ -262,10 +285,31 @@ const vendorNodeModules = ({ name = 'vendor', chunks }) => ({
   ],
 })
 
+/**
+ * Make environment variables available via `process.env` while building. The
+ * variables are copied from the current environment at build time. If you want
+ * to set environment variables to something other to what they actually are in
+ * the current environment, use `setEnv`. Makes use of
+ * `webpack.EnvironmentPlugin`.
+ *
+ * @function copyEnv
+ * @param {Array<string>} vars The names of environment variables to make available.
+ */
 const copyEnv = vars => ({
   plugins: [new webpack.EnvironmentPlugin(vars)],
 })
 
+/**
+ * Make environment variables available via `process.env` while building. The
+ * variables are set explicitly as specified in `env`. Note that you should not
+ * `JSON.stringify` the values, that will be done for you. Makes use of
+ * `webpack.DefinePlugin`
+ *
+ * @function setEnv
+ * @param {Object} env An object whose keys are the names of environment
+ * variables and whose values are the values to set. These should be plain JSON
+ * objects.
+ */
 const setEnv = env => ({
   plugins: [
     new webpack.DefinePlugin({
