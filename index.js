@@ -330,7 +330,7 @@ const analyze = () => ({
  *
  * @function dev.hotModuleReloading
  * @param {boolean} [$0.useReactHotLoader] Set to true if you're using
- *                  `react-hot-loader`. Adds `react-hot-loader-patch` to each
+ *                  `react-hot-loader`. Adds `react-hot-loader/patch` to each
  *                  entry.
  * @param {boolean} [$0.useWebpackHotMiddleware] Set to true if you're using
  *                  `webpack-hot-middleware`. Adds
@@ -356,7 +356,7 @@ const hotModuleReloading = (
     webpackDevServerUrl && prependToEachEntry('webpack/hot/only-dev-server'),
     webpackDevServerUrl &&
       prependToEachEntry(`webpack-dev-server/client?${webpackDevServerUrl}`),
-    useReactHotLoader && prependToEachEntry('react-hot-loader-patch'),
+    useReactHotLoader && prependToEachEntry('react-hot-loader/patch'),
     merge({
       plugins: [
         new webpack.HotModuleReplacementPlugin(),
