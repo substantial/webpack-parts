@@ -148,7 +148,7 @@ const css = ({ include, postcssOptions, extractFilename } = {}) => ifProd(
  * @param {string} [$0.basePath] The base path to which js files will be emitted.
  *        It's essentially a prefix to `fileName` and `chunkFilename`
  */
-const js = ({ include, basePath = '' }) => ({
+const js = ({ include, basePath = '' } = {}) => ({
   output: {
     filename: `${basePath}[name]${ifProd('.[chunkhash]', '')}.js`,
     chunkFilename: `${basePath}[name]${ifProd('.[chunkhash]', '')}.js`,
