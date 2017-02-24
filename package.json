@@ -5,5 +5,18 @@
   "main": "index.js",
   "repository": "https://github.com/substantial/webpack-parts",
   "author": "Aaron Jensen",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": ">= 6.0.0"
+  },
+  "dependencies": {
+    "lodash": "^4.0.0",
+    "webpack-merge": "^3.0.0",
+    "extract-text-webpack-plugin": "beta",
+    "progress-bar-webpack-plugin": "^1.9.3",
+    "webpack": "^2.2.1",
+    "webpack-bundle-analyzer": "^2.3.0"
+  },
+  "devDependencies": {
+  }
 }
