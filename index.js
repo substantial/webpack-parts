@@ -184,8 +184,12 @@ const js = ({ include, basePath = '' }) => ({
  * @param {Object} [$0.imageOptions] Options to pass to `image-webpack-loader`
  * @param {string} [$0.basePath] The base path to which images files will be
  *        emitted.
+ * @param {number} [$0.inlineLimitBytes] If set, inline images that are smaller
+ *        than $0.inlineLimitBytes when `NODE_ENV === 'production'`
  */
-const images = ({ include, imageOptions, basePath = '' } = {}) => ({
+const images = (
+  { include, imageOptions, basePath = '', inlineLimitBytes } = {}
+) => ({
   module: {
     rules: [
       {
@@ -193,12 +197,20 @@ const images = ({ include, imageOptions, basePath = '' } = {}) => ({
         test: /\.(png|jpg|gif|svg)$/,
         use: ifProd(
           [
-            {
-              loader: 'file-loader',
-              options: {
-                name: `${basePath}[name].[hash:8].[ext]`,
-              },
-            },
+            inlineLimitBytes
+              ? {
+                  loader: 'url-loader',
+                  options: {
+                    inlineLimitBytes,
+                    name: `${basePath}[name].[hash:8].[ext]`,
+                  },
+                }
+              : {
+                  loader: 'file-loader',
+                  options: {
+                    name: `${basePath}[name].[hash:8].[ext]`,
+                  },
+                },
             {
               loader: 'image-webpack-loader',
               options: imageOptions,
@@ -212,45 +224,6 @@ const images = ({ include, imageOptions, basePath = '' } = {}) => ({
               },
             },
           ]
-        ),
-      },
-    ],
-  },
-})
-
-const inlineImages = (
-  {
-    basePath = '',
-    imageOptions,
-    include,
-    limit = 10000,
-  } = {}
-) => ({
-  module: {
-    rules: [
-      {
-        include,
-        test: /\.(png|jpg|gif|svg)$/,
-        use: ifProd(
-          [
-            {
-              loader: 'url-loader',
-              options: {
-                limit,
-                name: `${basePath}[name].[hash:8].[ext]`,
-              },
-            },
-            {
-              loader: 'image-webpack-loader',
-              options: imageOptions,
-            },
-          ],
-          {
-            loader: 'file-loader',
-            options: {
-              name: `${basePath}[name].[ext]`,
-            },
-          }
         ),
       },
     ],
@@ -392,7 +365,6 @@ module.exports = {
   copyEnv,
   css,
   images,
-  inlineImages,
   js,
   setEnv,
   vendorNodeModules,
