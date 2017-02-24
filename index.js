@@ -97,9 +97,10 @@ const inlineCss = ({ include, postcssOptions }) => ({
  * @param {string|Array} [$0.include] [Webpack include
  * conditions](https://webpack.js.org/configuration/module/#condition)
  * @param {Object} [$0.postcssOptions] [postcss-loader
- * options](https://github.com/postcss/postcss-loader#options)
+ *                                     options](https://github.com/postcss/postcss-loader#options)
  * @param {string} [$0.extractFilename] Path to extract css to using
- * `extract-text-webpack-plugin` when `NODE_ENV=production`
+ *                                      `extract-text-webpack-plugin` when
+ *                                      `NODE_ENV=production`
  */
 const css = ({ include, postcssOptions, extractFilename } = {}) => ifProd(
   config => {
@@ -145,8 +146,9 @@ const css = ({ include, postcssOptions, extractFilename } = {}) => ifProd(
  * @function js
  * @param {string|Array} [$0.include] [Webpack include
  * conditions](https://webpack.js.org/configuration/module/#condition)
- * @param {string} [$0.basePath] The base path to which js files will be emitted.
- *        It's essentially a prefix to `fileName` and `chunkFilename`
+ * @param {string} [$0.basePath] The base path to which js files will be
+ *                               emitted. It's essentially a prefix to
+ *                               `fileName` and `chunkFilename`
  */
 const js = ({ include, basePath = '' } = {}) => ({
   output: {
@@ -183,9 +185,10 @@ const js = ({ include, basePath = '' } = {}) => ({
  * conditions](https://webpack.js.org/configuration/module/#condition)
  * @param {Object} [$0.imageOptions] Options to pass to `image-webpack-loader`
  * @param {string} [$0.basePath] The base path to which images files will be
- *        emitted.
+ *                               emitted.
  * @param {number} [$0.inlineLimitBytes] If set, inline images that are smaller
- *        than $0.inlineLimitBytes when `NODE_ENV === 'production'`
+ *                                       than $0.inlineLimitBytes when `NODE_ENV
+ *                                       === 'production'`
  */
 const images = (
   { include, imageOptions, basePath = '', inlineLimitBytes } = {}
@@ -271,7 +274,7 @@ const forceSingleLodash = lodashPath => ({
  * @function vendorNodeModules
  * @param {string} [$0.name] Name of vendor chunk
  * @param {Array<string>} [$0.chunks] Array of entry chunk names to consider
- *         when looking for used `node_modules`.
+ *                                    when looking for used `node_modules`.
  */
 const vendorNodeModules = ({ name = 'vendor', chunks }) => ({
   plugins: [
@@ -307,8 +310,8 @@ const copyEnv = vars => ({
  *
  * @function setEnv
  * @param {Object} env An object whose keys are the names of environment
- * variables and whose values are the values to set. These should be plain JSON
- * objects.
+ *                     variables and whose values are the values to set. These
+ *                     should be plain JSON objects.
  */
 const setEnv = env => ({
   plugins: [
@@ -338,11 +341,38 @@ const failIfNotConfigured = (field, name) => config => {
   return config
 }
 
-const reactHotLoader = () => ifProd(
+/**
+ * Enable hot module reloading when `NODE_ENV !== 'production'`
+ *
+ * @function dev.hotModuleReloading
+ * @param {boolean} [$0.useReactHotLoader] Set to true if you're using
+ *                  `react-hot-loader`. Adds `react-hot-loader-patch` to each
+ *                  entry.
+ * @param {boolean} [$0.useWebpackHotMiddleware] Set to true if you're using
+ *                  `webpack-hot-middleware`. Adds
+ *                  `webpack-hot-middleware/client` to each entry.
+ * @param {boolean} [$0.webpackDevServerUrl] Set to url such as
+ *                  `http://localhost:3000` if you're using
+ *                  `webpack-dev-server`. Adds `webpack-dev-server/client` and
+ *                  `webpack/hot/only-dev-server` to each entry. Should not be
+ *                  used with `useWebpackHotMiddleware`.
+ */
+const hotModuleReloading = (
+  {
+    useReactHotLoader,
+    useWebpackHotMiddleware,
+    webpackDevServerUrl,
+  } = {}
+) => ifProd(
   null,
   flow(
-    failIfNotConfigured('entry', 'reactHotLoader'),
-    prependToEachEntry('react-hot-loader/patch'),
+    failIfNotConfigured('entry', 'hotModuleReloading'),
+    useWebpackHotMiddleware &&
+      prependToEachEntry('webpack-hot-middleware/client'),
+    webpackDevServerUrl && prependToEachEntry('webpack/hot/only-dev-server'),
+    webpackDevServerUrl &&
+      prependToEachEntry(`webpack-dev-server/client?${webpackDevServerUrl}`),
+    useReactHotLoader && prependToEachEntry('react-hot-loader-patch'),
     merge({
       plugins: [
         new webpack.HotModuleReplacementPlugin(),
@@ -352,6 +382,12 @@ const reactHotLoader = () => ifProd(
   )
 )
 
+/**
+ * Use `webpack-bundle-analyzer` to analyze bundle size. Opens a web browser
+ * with a visual graph of bundled modules and their sizes
+ *
+ * @function dev.analyze
+ */
 const analyze = () => ({
   plugins: [
     new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)({
@@ -360,15 +396,12 @@ const analyze = () => ({
   ],
 })
 
-const webpackHotMiddleware = () =>
-  ifProd(
-    null,
-    flow(
-      failIfNotConfigured('entry', 'webpackHotMiddleware'),
-      prependToEachEntry('webpack-hot-middleware/client')
-    )
-  )
-
+/**
+ * Minimize javascript code using uglify and configure all other loaders to
+ * minimize and disable debug if `NODE_ENV === 'production'`.
+ *
+ * @function optimize.minimize
+ */
 const minimize = () => ifProd({
   plugins: [
     new webpack.LoaderOptionsPlugin({
@@ -392,6 +425,15 @@ const minimize = () => ifProd({
   ],
 })
 
+/**
+ * Enable source maps. Uses different options depending on NODE_ENV.
+ *
+ * @function dev.sourceMaps
+ * @param {string} $0.development devtool to use in development. Defaults to
+ *                                `cheap-module-source-map`
+ * @param {string} $0.production devtool to use in production. Defaults to
+ *                               `source-map`
+ */
 const sourceMaps = (
   {
     development = 'cheap-module-source-map',
@@ -399,12 +441,16 @@ const sourceMaps = (
   } = {}
 ) => ({ devtool: ifProd(production, development) })
 
+/**
+ * Enable progress bar when building at the command line.
+ *
+ * @function ui.progressBar
+ */
 const progressBar = () => ({
   plugins: [new (require('progress-bar-webpack-plugin'))()],
 })
 
 module.exports = {
-  analyze,
   combine,
   copyEnv,
   css,
@@ -413,9 +459,9 @@ module.exports = {
   setEnv,
   vendorNodeModules,
   dev: {
-    reactHotLoader,
+    hotModuleReloading,
     sourceMaps,
-    webpackHotMiddleware,
+    analyze,
   },
   optimize: {
     forceSingleLodash,
