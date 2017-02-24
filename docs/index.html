@@ -1,0 +1,1310 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <title>  | Documentation</title>
+  <meta name='viewport' content='width=device-width,initial-scale=1'>
+  <link href='assets/bass.css' type='text/css' rel='stylesheet' />
+  <link href='assets/style.css' type='text/css' rel='stylesheet' />
+  <link href='assets/github.css' type='text/css' rel='stylesheet' />
+</head>
+<body class='documentation'>
+  <div class='max-width-4 mx-auto'>
+    <div class='clearfix md-mxn2'>
+      <div class='fixed xs-hide fix-3 overflow-auto max-height-100'>
+        <div class='py1 px2'>
+          <h3 class='mb0 no-anchor'></h3>
+          <div class='mb1'><code></code></div>
+          <input
+            placeholder='Filter'
+            id='filter-input'
+            class='col12 block input'
+            type='text' />
+          <div id='toc'>
+            <ul class='list-reset h5 py1-ul'>
+              
+                
+                <li><a
+                  href='#combine'
+                  class="">
+                  combine
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#loadcss'
+                  class="">
+                  load.css
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#loadjs'
+                  class="">
+                  load.js
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#loadimages'
+                  class="">
+                  load.images
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#outputvendornodemodules'
+                  class="">
+                  output.vendorNodeModules
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#setupcopyenv'
+                  class="">
+                  setup.copyEnv
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#setupsetenv'
+                  class="">
+                  setup.setEnv
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#devanalyze'
+                  class="">
+                  dev.analyze
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#devhotmodulereloading'
+                  class="">
+                  dev.hotModuleReloading
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#devsourcemaps'
+                  class="">
+                  dev.sourceMaps
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#optimizeforcesinglelodash'
+                  class="">
+                  optimize.forceSingleLodash
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#optimizeminimize'
+                  class="">
+                  optimize.minimize
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#optimizeremovemomentlocales'
+                  class="">
+                  optimize.removeMomentLocales
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#uiprogressbar'
+                  class="">
+                  ui.progressBar
+                  
+                </a>
+                
+                </li>
+              
+            </ul>
+          </div>
+          <div class='mt1 h6 quiet'>
+            <a href='http://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
+          </div>
+        </div>
+      </div>
+      <div class='fix-margin-3'>
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='combine'>
+      combine
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/substantial/webpack-parts/blob/2f53af4dc8a0cfdd1490d0e7ca881acd0b318dea/index.js#L56-L63'>
+      <span>index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Combine multiple webpack parts into a webpack config. A part is either an
+object, which will be merged in to the config, or it is a function that takes
+the config as it is and is expected to return a new version of the config.
+The parts are resolved in the order they are provided. There is a small base
+config that combine starts with that looks like this:</p>
+<pre><code>{
+  output: {
+    filename: &#x27;[name].[chunkhash].js&#x27;,
+    chunkFilename: &#x27;[name].[chunkhash].js&#x27;,
+    publicPath: &#x27;/&#x27;
+  }
+}
+</code></pre>
+
+
+  <div class='pre p1 fill-light mt0'>combine(parts: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a>)&gt;): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>parts</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a>)&gt;)</code> Array of webpack config objects or functions
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
+        Combined Webpack config object
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// webpack.config.js</span>
+<span class="hljs-keyword">const</span> parts = <span class="hljs-built_in">require</span>(<span class="hljs-string">'webpack-parts'</span>)
+
+<span class="hljs-built_in">module</span>.exports = parts.combine(
+  {
+    <span class="hljs-attr">entry</span>: <span class="hljs-string">"app/index.js"</span>,
+    <span class="hljs-attr">output</span>: {
+      <span class="hljs-attr">path</span>: <span class="hljs-string">"build"</span>
+    }
+  },
+  parts.load.js(),
+  parts.load.css(),
+  parts.dev.sourceMaps(),
+  parts.optimize.minimize()
+)</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='loadcss'>
+      load.css
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/substantial/webpack-parts/blob/2f53af4dc8a0cfdd1490d0e7ca881acd0b318dea/index.js#L105-L141'>
+      <span>index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Use postcss to process css.</p>
+
+
+  <div class='pre p1 fill-light mt0'>load.css($0: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            (default <code>{}</code>)
+            )</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.include</span> <code class='quiet'>[(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)]</code>
+                  </td>
+                  <td class='break-word'><span><a href="https://webpack.js.org/configuration/module/#condition">Webpack include
+conditions</a>
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.postcssOptions</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>]</code>
+                  </td>
+                  <td class='break-word'><span><a href="https://github.com/postcss/postcss-loader#options">postcss-loader
+options</a>
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.extractFilename</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]</code>
+                  </td>
+                  <td class='break-word'><span>Path to extract css to using
+
+<code>extract-text-webpack-plugin</code>
+ when
+
+<code>NODE_ENV=production</code>
+</span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='loadjs'>
+      load.js
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/substantial/webpack-parts/blob/2f53af4dc8a0cfdd1490d0e7ca881acd0b318dea/index.js#L153-L178'>
+      <span>index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Use babel to process js.</p>
+
+
+  <div class='pre p1 fill-light mt0'>load.js($0: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            (default <code>{}</code>)
+            )</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.include</span> <code class='quiet'>[(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)]</code>
+                  </td>
+                  <td class='break-word'><span><a href="https://webpack.js.org/configuration/module/#condition">Webpack include
+conditions</a>
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.basePath</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]</code>
+                  </td>
+                  <td class='break-word'><span>The base path to which js files will be
+emitted. It&#x27;s essentially a prefix to
+
+<code>fileName</code>
+ and 
+<code>chunkFilename</code>
+</span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='loadimages'>
+      load.images
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/substantial/webpack-parts/blob/2f53af4dc8a0cfdd1490d0e7ca881acd0b318dea/index.js#L193-L234'>
+      <span>index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Include images via urls.</p>
+
+
+  <div class='pre p1 fill-light mt0'>load.images($0: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            (default <code>{}</code>)
+            )</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.include</span> <code class='quiet'>[(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)]</code>
+                  </td>
+                  <td class='break-word'><span><a href="https://webpack.js.org/configuration/module/#condition">Webpack include
+conditions</a>
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.imageOptions</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>]</code>
+                  </td>
+                  <td class='break-word'><span>Options to pass to 
+<code>image-webpack-loader</code>
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.basePath</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]</code>
+                  </td>
+                  <td class='break-word'><span>The base path to which images files will be
+emitted.
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.inlineLimitBytes</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  </td>
+                  <td class='break-word'><span>If set, inline images that are smaller
+than $0.inlineLimitBytes when 
+<code>NODE_ENV === &#x27;production&#x27;</code>
+</span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='outputvendornodemodules'>
+      output.vendorNodeModules
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/substantial/webpack-parts/blob/2f53af4dc8a0cfdd1490d0e7ca881acd0b318dea/index.js#L246-L256'>
+      <span>index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Extract all used dependencies from <code>node_modules</code> into a separate <code>vendor.js</code>.
+By default, it will consider all dependencies used by all entry points, but
+you override this by specifying <code>$0.chunks</code>.</p>
+
+
+  <div class='pre p1 fill-light mt0'>output.vendorNodeModules($0: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.name</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]</code>
+                  </td>
+                  <td class='break-word'><span>Name of vendor chunk
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.chunks</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>&gt;]</code>
+                  </td>
+                  <td class='break-word'><span>Array of entry chunk names to consider
+when looking for used 
+<code>node_modules</code>
+.
+</span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='setupcopyenv'>
+      setup.copyEnv
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/substantial/webpack-parts/blob/2f53af4dc8a0cfdd1490d0e7ca881acd0b318dea/index.js#L268-L270'>
+      <span>index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Make environment variables available via <code>process.env</code> while building. The
+variables are copied from the current environment at build time. If you want
+to set environment variables to something other to what they actually are in
+the current environment, use <code>setEnv</code>. Makes use of
+<code>webpack.EnvironmentPlugin</code>.</p>
+
+
+  <div class='pre p1 fill-light mt0'>setup.copyEnv(vars: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>&gt;)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>vars</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>&gt;)</code> The names of environment variables to make available.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='setupsetenv'>
+      setup.setEnv
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/substantial/webpack-parts/blob/2f53af4dc8a0cfdd1490d0e7ca881acd0b318dea/index.js#L283-L289'>
+      <span>index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Make environment variables available via <code>process.env</code> while building. The
+variables are set explicitly as specified in <code>env</code>. Note that you should not
+<code>JSON.stringify</code> the values, that will be done for you. Makes use of
+<code>webpack.DefinePlugin</code></p>
+
+
+  <div class='pre p1 fill-light mt0'>setup.setEnv(env: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>env</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code> An object whose keys are the names of environment
+variables and whose values are the values to set. These
+should be plain JSON objects.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='devanalyze'>
+      dev.analyze
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/substantial/webpack-parts/blob/2f53af4dc8a0cfdd1490d0e7ca881acd0b318dea/index.js#L317-L323'>
+      <span>index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Use <code>webpack-bundle-analyzer</code> to analyze bundle size. Opens a web browser
+with a visual graph of bundled modules and their sizes</p>
+
+
+  <div class='pre p1 fill-light mt0'>dev.analyze()</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='devhotmodulereloading'>
+      dev.hotModuleReloading
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/substantial/webpack-parts/blob/2f53af4dc8a0cfdd1490d0e7ca881acd0b318dea/index.js#L341-L364'>
+      <span>index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Enable hot module reloading when <code>NODE_ENV !== &#x27;production&#x27;</code></p>
+
+
+  <div class='pre p1 fill-light mt0'>dev.hotModuleReloading($0: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            (default <code>{}</code>)
+            )</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.useReactHotLoader</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>]</code>
+                  </td>
+                  <td class='break-word'><span>Set to true if you&#x27;re using
+
+<code>react-hot-loader</code>
+. Adds 
+<code>react-hot-loader-patch</code>
+ to each
+entry.
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.useWebpackHotMiddleware</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>]</code>
+                  </td>
+                  <td class='break-word'><span>Set to true if you&#x27;re using
+
+<code>webpack-hot-middleware</code>
+. Adds
+
+<code>webpack-hot-middleware/client</code>
+ to each entry.
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.webpackDevServerUrl</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>]</code>
+                  </td>
+                  <td class='break-word'><span>Set to url such as
+
+<code>http://localhost:3000</code>
+ if you&#x27;re using
+
+<code>webpack-dev-server</code>
+. Adds 
+<code>webpack-dev-server/client</code>
+ and
+
+<code>webpack/hot/only-dev-server</code>
+ to each entry. Should not be
+used with 
+<code>useWebpackHotMiddleware</code>
+.
+</span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='devsourcemaps'>
+      dev.sourceMaps
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/substantial/webpack-parts/blob/2f53af4dc8a0cfdd1490d0e7ca881acd0b318dea/index.js#L375-L380'>
+      <span>index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Enable source maps. Uses different options depending on NODE_ENV.</p>
+
+
+  <div class='pre p1 fill-light mt0'>dev.sourceMaps($0: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            (default <code>{}</code>)
+            )</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.development</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>](default &#x27;cheap-module-source-map&#x27;)</code>
+                  </td>
+                  <td class='break-word'><span>devtool to use in development. Defaults to
+
+<code>cheap-module-source-map</code>
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.production</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>](default &#x27;source-map&#x27;)</code>
+                  </td>
+                  <td class='break-word'><span>devtool to use in production. Defaults to
+
+<code>source-map</code>
+</span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='optimizeforcesinglelodash'>
+      optimize.forceSingleLodash
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/substantial/webpack-parts/blob/2f53af4dc8a0cfdd1490d0e7ca881acd0b318dea/index.js#L393-L400'>
+      <span>index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Force to a single version of lodash across all dependencies. Lodash is big
+and we don&#x27;t want to include it or its bits more than once. This is probably
+safe as long as there are no mixed major versions and the most recent version
+of lodash is the one forced.</p>
+
+
+  <div class='pre p1 fill-light mt0'>optimize.forceSingleLodash(lodashPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>lodashPath</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code> Absolute path to lodash module
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>parts.optimize.forceSingleLodash(<span class="hljs-built_in">require</span>.resolve(<span class="hljs-string">'lodash'</span>))</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='optimizeminimize'>
+      optimize.minimize
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/substantial/webpack-parts/blob/2f53af4dc8a0cfdd1490d0e7ca881acd0b318dea/index.js#L408-L429'>
+      <span>index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Minimize javascript code using uglify and configure all other loaders to
+minimize and disable debug if <code>NODE_ENV === &#x27;production&#x27;</code>.</p>
+
+
+  <div class='pre p1 fill-light mt0'>optimize.minimize()</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='optimizeremovemomentlocales'>
+      optimize.removeMomentLocales
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/substantial/webpack-parts/blob/2f53af4dc8a0cfdd1490d0e7ca881acd0b318dea/index.js#L438-L442'>
+      <span>index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Do not include any of moment&#x27;s locales. If we don&#x27;t do this, they are all
+included and add 23kb min+gzip. You probably shouldn&#x27;t use this if you need
+to support other locales.</p>
+
+
+  <div class='pre p1 fill-light mt0'>optimize.removeMomentLocales()</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='uiprogressbar'>
+      ui.progressBar
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/substantial/webpack-parts/blob/2f53af4dc8a0cfdd1490d0e7ca881acd0b318dea/index.js#L449-L451'>
+      <span>index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Enable progress bar when building at the command line.</p>
+
+
+  <div class='pre p1 fill-light mt0'>ui.progressBar()</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+      </div>
+    </div>
+  </div>
+  <script src='assets/anchor.js'></script>
+  <script src='assets/site.js'></script>
+</body>
+</html>
