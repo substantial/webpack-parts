@@ -83,9 +83,7 @@ const inlineCss = ({ include, postcssOptions }) => ({
           },
           {
             loader: 'postcss-loader',
-            options: {
-              plugins: postcssOptions,
-            },
+            options: postcssOptions,
           },
         ],
       },
