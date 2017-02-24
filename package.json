@@ -11,7 +11,7 @@
   },
   "scripts": {
     "documentation:watch": "yarn documentation:build -- -w",
-    "documentation:build": "documentation build index.js --github -f html -o docs",
+    "documentation:build": "documentation build index.js --github -f html -o docs --name 'webpack-parts'",
     "format": "prettier --single-quote --trailing-comma es5 --write \"*.js\" && eslint --fix .",
     "lint": "eslint ."
   },
