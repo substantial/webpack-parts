@@ -1,6 +1,6 @@
 {
   "name": "webpack-parts",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Build your webpack config from composable and opinionated parts",
   "main": "index.js",
   "repository": "https://github.com/substantial/webpack-parts",
