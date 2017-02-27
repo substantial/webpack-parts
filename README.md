@@ -1,3 +1,7 @@
+# DEPRECATION NOTICE
+
+webpack-parts was created before we knew about [webpack-blocks](https://github.com/andywer/webpack-blocks) which is the same idea but more established. Please use it instead as we will be porting to that and nuking webpack-parts.
+
 # webpack-parts
 
 Build your webpack config from composable and opinionated parts.
